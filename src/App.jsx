@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-
+import { GoSearch, GoX  } from "react-icons/go";
 // Kirana Ledger — Refined UI (No Quick Actions)
 // - Cleaner WhatsApp share (emoji sections)
 // - No bottom "Quick Actions" card
@@ -17,6 +17,7 @@ function toLocalInput(iso){const d=new Date(iso||Date.now());const p=n=>String(n
 function fromLocalInput(s){return new Date(s).toISOString();}
 
 export default function App(){
+  const [showSearch, setShowSearch] = useState(false);
   const [customers,setCustomers]=useState(()=>JSON.parse(localStorage.getItem('kirana_customers')||'[]'));
   const [txns,setTxns]=useState(()=>JSON.parse(localStorage.getItem('kirana_txns')||'[]'));
 
@@ -87,24 +88,74 @@ export default function App(){
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 z-10 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
-          <span className="text-xl font-semibold">🧾 Kirana Customer Ledger</span>
-          {!current ? (
-            <div className="ml-auto flex gap-2">
-              <input className="input max-w-xs" placeholder="Search name or phone" value={search} onChange={e=>setSearch(e.target.value)} />
-              <button onClick={()=>setShowAddCustomer(true)} className="px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">+ Add Customer</button>
-            </div>
+  <header className="sticky top-0 z-10 bg-white border-b">
+  <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+    <span className="text-xl font-semibold">🧾 Kirana Customer Ledger</span>
+    {!current ? (
+      <div className="ml-auto flex gap-4">
+        {/* Search icon button */}
+        <button
+          onClick={() => setShowSearch(v => !v)}
+          className="p-1 flex items-center justify-center"
+        >
+          {showSearch ? (
+            <GoX className="h-7 w-7 text-gray-700" />
           ) : (
-            <div className="ml-auto flex gap-2">
-              <button onClick={()=>setShowCredit(true)} className="px-3 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">+ Add Record</button>
-              <button onClick={()=>setShowPayment(true)} className="px-3 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">Money Received</button>
-              <button onClick={()=>shareLedger(true)} className="px-3 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">Share on WhatsApp</button>
-              <button onClick={()=>setSelectedId(null)} className="px-3 py-2 rounded-lg border">Back</button>
-            </div>
+            <GoSearch className="h-7 w-7 text-gray-700" />
           )}
-        </div>
-      </header>
+        </button>
+        <button
+          onClick={() => setShowAddCustomer(true)}
+          className="px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+        >
+          + Add Customer
+        </button>
+      </div>
+    ) : (
+      <div className="ml-auto flex gap-2">
+        <button
+          onClick={() => setShowCredit(true)}
+          className="px-3 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700"
+        >
+          + Add Record
+        </button>
+        <button
+          onClick={() => setShowPayment(true)}
+          className="px-3 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700"
+        >
+          Money Received
+        </button>
+        <button
+          onClick={() => shareLedger(true)}
+          className="px-3 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
+        >
+          Share on WhatsApp
+        </button>
+        <button
+          onClick={() => setSelectedId(null)}
+          className="px-3 py-2 rounded-lg border"
+        >
+          Back
+        </button>
+      </div>
+    )}
+  </div>
+
+  {/* Search input row (only visible when toggled) */}
+  {showSearch && (
+    <div className="border-t bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-2">
+        <input
+          className="input w-full"
+          placeholder="Search name or phone"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          autoFocus
+        />
+      </div>
+    </div>
+  )}
+</header>
 
       <main className="max-w-7xl mx-auto p-4">
         {!current ? (

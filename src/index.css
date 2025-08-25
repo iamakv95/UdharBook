@@ -1,2 +1,16 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+  @layer base {
+      button {
+        cursor: pointer;
+        margin-block: 5px;
+      }
+      .input{
+        outline: none;
+        border: 1px solid rgb(138, 138, 138);
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin: 5px;
+      }
+
+    }
